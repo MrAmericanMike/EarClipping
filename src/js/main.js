@@ -24,6 +24,7 @@ const OCTAGON_BUTTON = document.querySelector("#octagon");
 
 let ORIGINAL_POINTS = [];
 let POINTS = [];
+const TRIANGLES = [];
 const LABELS = [];
 
 START_BUTTON.addEventListener("click", startClipping);
@@ -42,6 +43,7 @@ OCTAGON_BUTTON.addEventListener("click", () => {
 	triangulatePrefab(OCTAGON);
 });
 REVERSE_BUTTON.addEventListener("click", () => {
+	TRIANGLES.length = 0;
 	CANVAS.innerHTML = "";
 	POINTS = [...ORIGINAL_POINTS];
 	POINTS.reverse();
@@ -95,13 +97,14 @@ function labelPoints(points) {
 }
 
 function toggleLabels() {
+	console.log(LABELS.length);
 	if (LABELS.length == 0) return;
-
+	console.log(LABELS[0].getAttribute("fill"));
 	let fill;
-	if (LABELS[0].getAttribute("fill") == "red") {
+	if (LABELS[0].getAttribute("fill") == "crimson") {
 		fill = "transparent";
 	} else {
-		fill = "red";
+		fill = "crimson";
 	}
 	for (let i = 0; i < LABELS.length; i++) {
 		LABELS[i].setAttributeNS(null, "fill", fill);
@@ -124,17 +127,16 @@ function getRandomColor() {
 	for (let i = 0; i < 6; i++) {
 		color += letters[Math.floor(Math.random() * 5)];
 	}
-	return color;
+	return color + "CC";
 }
 
-function drawTriangles(triangles) {
-	function setDelay(i) {
-		setTimeout(function () {
-			drawTriangle(triangles[i]);
-		}, i * 500);
+function drawTriangles() {
+	if (TRIANGLES.length) {
+		drawTriangle(TRIANGLES[0]);
 	}
-	for (let i = 0; i < triangles.length; i++) {
-		setDelay(i);
+	TRIANGLES.shift();
+	if (TRIANGLES.length) {
+		setTimeout(drawTriangles, 100);
 	}
 }
 
@@ -189,7 +191,6 @@ function triangulate(points) {
 	}
 
 	let i = 1;
-	const TRIANGLES = [];
 
 	labelPoints(points);
 	measureAngles(points);
@@ -223,7 +224,7 @@ function triangulate(points) {
 	TRIANGLES.push(new Triangle(points[0], points[1], points[2]));
 
 	setTimeout(() => {
-		drawTriangles(TRIANGLES);
+		drawTriangles();
 	}, 500);
 }
 
@@ -237,10 +238,13 @@ function triangulatePrefab(prefab) {
 		connectPoints(POINTS[i], POINTS[i + 1]);
 	}
 	connectPoints(POINTS[POINTS.length - 1], POINTS[0]);
+	ORIGINAL_POINTS = POINTS;
 }
 
 function reset() {
+	TRIANGLES.length = 0;
 	POINTS.length = 0;
+	ORIGINAL_POINTS.length = 0;
 	CANVAS.innerHTML = "";
 }
 
