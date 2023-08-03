@@ -1,0 +1,17 @@
+{
+	"name": "ear-clipping",
+	"version": "0.0.0",
+	"description": "Ear-Clipping",
+	"author": "",
+	"license": "",
+	"main": "./src/index.html",
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "vite build",
+		"preview": "vite preview"
+	},
+	"devDependencies": {
+		"vite": "4.4.8"
+	}
+}

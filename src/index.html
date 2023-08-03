@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Ear-Clipping</title>
+		<link rel="shortcut icon" href="favicon.png" type="./image/png" />
+		<script defer type="module" src="./js/main.js"></script>
+	</head>
+
+	<body>
+		<div class="container">
+			<h1>Ear-Clipping Triangulation</h1>
+			<div class="description">
+				<p>
+					Based on <a target="_blank" href="https://github.com/twohiccups/Ear-Clipping">this code</a>. Original example
+					<a target="_blank" href="https://twohiccups.github.io/Ear-Clipping/">here</a>.
+				</p>
+				<h4>
+					Click on the canvas to place some vertices. When you press "Start" I will connect origin to the last point. You should avoid overlaps,
+					otherwise results will be weird.
+				</h4>
+			</div>
+			<div class="svg">
+				<svg id="triangulation" width="1000" height="600"></svg>
+			</div>
+			<div class="controls">
+				<div>
+					<button id="start">Start</button>
+					<button id="labels">Labels</button>
+					<button id="clear">Clear</button>
+					<button id="reverse">Reverse</button>
+					<!-- <button id="step">Step</button> -->
+				</div>
+
+				<div>
+					<button id="bull">Bull</button>
+					<button id="doce">Doce</button>
+					<button id="saw">Saw</button>
+					<button id="octagon">Octagon</button>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

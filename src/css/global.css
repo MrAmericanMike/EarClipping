@@ -1,0 +1,69 @@
+* {
+	margin: 0px;
+	padding: 0px;
+	box-sizing: border-box;
+}
+
+html,
+body {
+	width: 100%;
+	height: 100vh;
+}
+
+body {
+	background-color: #101020;
+	color: aliceblue;
+	font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+a,
+a:visited {
+	color: dodgerblue;
+}
+
+a:hover {
+	color: royalblue;
+}
+
+.container {
+	width: 1012px;
+	margin: 0 auto;
+}
+
+h1 {
+	text-align: center;
+}
+
+p {
+	margin-bottom: 12px;
+}
+
+.description {
+	padding: 12px 0px;
+}
+
+.svg {
+	display: flex;
+	justify-content: center;
+}
+
+#triangulation {
+	border: 1px solid crimson;
+	background-color: aliceblue;
+}
+
+.controls {
+	width: 1012px;
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+button {
+	font-size: 1rem;
+	margin: 8px 4px;
+	padding: 2px 4px;
+	cursor: pointer;
+}
