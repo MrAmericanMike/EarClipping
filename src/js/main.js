@@ -5,6 +5,10 @@
  */
 
 import "../css/global.css";
+
+import Triangle from "./Triangle.js";
+import Point from "./Point.js";
+
 import BULL from "./prefabs/bull.js";
 import DOCE from "./prefabs/doce.js";
 import SAW from "./prefabs/saw.js";
@@ -31,29 +35,31 @@ START_BUTTON.addEventListener("click", startClipping);
 LABELS_BUTTON.addEventListener("click", toggleLabels);
 CLEAR_BUTTON.addEventListener("click", reset);
 BULL_BUTTON.addEventListener("click", () => {
-	triangulatePrefab(BULL);
+	loadPrefab(BULL);
 });
 DOCE_BUTTON.addEventListener("click", () => {
-	triangulatePrefab(DOCE);
+	loadPrefab(DOCE);
 });
 SAW_BUTTON.addEventListener("click", () => {
-	triangulatePrefab(SAW);
+	loadPrefab(SAW);
 });
 OCTAGON_BUTTON.addEventListener("click", () => {
-	triangulatePrefab(OCTAGON);
+	loadPrefab(OCTAGON);
 });
 REVERSE_BUTTON.addEventListener("click", () => {
 	TRIANGLES.length = 0;
 	CANVAS.innerHTML = "";
 	POINTS = [...ORIGINAL_POINTS];
 	POINTS.reverse();
-	triangulatePrefab([...POINTS]);
+	loadPrefab([...POINTS]);
 });
 
-CANVAS.addEventListener("click", addPoint);
+CANVAS.addEventListener("click", addPointOnClick);
 
-function addPoint(event) {
-	POINTS.push(createPoint(event.offsetX, event.offsetY));
+function addPointOnClick(event) {
+	const POINT = new Point(event.offsetX, event.offsetY, 4, "black");
+	POINT.addToCanvas(CANVAS);
+	POINTS.push(POINT);
 	if (POINTS.length > 1) {
 		connectPoints(POINTS[POINTS.length - 1], POINTS[POINTS.length - 2]);
 	}
@@ -68,16 +74,6 @@ function startClipping() {
 	} else {
 		alert("Needs at least three points");
 	}
-}
-
-function createPoint(x, y) {
-	const cir = document.createElementNS(NS, "circle");
-	cir.setAttributeNS(null, "cx", x);
-	cir.setAttributeNS(null, "cy", y);
-	cir.setAttributeNS(null, "r", 4);
-	cir.setAttributeNS(null, "fill", "black");
-	CANVAS.appendChild(cir);
-	return new Point(x, y, cir);
 }
 
 function labelPoints(points) {
@@ -97,9 +93,7 @@ function labelPoints(points) {
 }
 
 function toggleLabels() {
-	console.log(LABELS.length);
 	if (LABELS.length == 0) return;
-	console.log(LABELS[0].getAttribute("fill"));
 	let fill;
 	if (LABELS[0].getAttribute("fill") == "crimson") {
 		fill = "transparent";
@@ -228,11 +222,13 @@ function triangulate(points) {
 	}, 500);
 }
 
-function triangulatePrefab(prefab) {
+function loadPrefab(prefab) {
 	reset();
 	POINTS.length = 0;
 	for (let i = 0; i < prefab.length; i++) {
-		POINTS.push(createPoint(prefab[i].x, prefab[i].y));
+		const POINT = new Point(prefab[i].x, prefab[i].y, 4, "black");
+		POINT.addToCanvas(CANVAS);
+		POINTS.push(POINT);
 	}
 	for (let i = 0; i < POINTS.length - 1; i++) {
 		connectPoints(POINTS[i], POINTS[i + 1]);
@@ -246,23 +242,4 @@ function reset() {
 	POINTS.length = 0;
 	ORIGINAL_POINTS.length = 0;
 	CANVAS.innerHTML = "";
-}
-
-class Triangle {
-	constructor(a, b, c) {
-		this.a = a;
-		this.b = b;
-		this.c = c;
-		this.area = function () {
-			return (a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)) / 2;
-		};
-	}
-}
-
-class Point {
-	constructor(x, y, c) {
-		this.x = x;
-		this.y = y;
-		this.c = c;
-	}
 }
