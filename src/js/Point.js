@@ -6,15 +6,26 @@ class Point {
 		this.y = y;
 		this.radius = radius;
 		this.color = color;
+		this.visible = true;
 	}
 
 	addToCanvas = (canvas) => {
-		const POINT = document.createElementNS(NS, "circle");
-		POINT.setAttributeNS(null, "cx", this.x);
-		POINT.setAttributeNS(null, "cy", this.y);
-		POINT.setAttributeNS(null, "r", this.radius);
-		POINT.setAttributeNS(null, "fill", this.color);
-		canvas.appendChild(POINT);
+		this.point = document.createElementNS(NS, "circle");
+		this.point.setAttributeNS(null, "cx", this.x);
+		this.point.setAttributeNS(null, "cy", this.y);
+		this.point.setAttributeNS(null, "r", this.radius);
+		this.point.setAttributeNS(null, "fill", this.color);
+		canvas.appendChild(this.point);
+	};
+
+	setVisible = (visible) => {
+		if (visible && !this.visible) {
+			this.point.setAttributeNS(null, "fill", this.color);
+			this.visible = true;
+		} else if (!visible && this.visible) {
+			this.point.setAttributeNS(null, "fill", "transparent");
+			this.visible = false;
+		}
 	};
 }
 

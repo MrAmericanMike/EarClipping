@@ -130,7 +130,7 @@ function drawTriangles() {
 	}
 	TRIANGLES.shift();
 	if (TRIANGLES.length) {
-		setTimeout(drawTriangles, 100);
+		setTimeout(drawTriangles, 1000);
 	}
 }
 
@@ -190,20 +190,21 @@ function triangulate(points) {
 	measureAngles(points);
 
 	while (points.length > 3) {
-		let pointA = points[i % points.length];
-		let pointB = points[(i + 1) % points.length];
-		let pointC = points[(i + 2) % points.length];
+		const pointA = points[i % points.length];
+		const pointB = points[(i + 1) % points.length];
+		const pointC = points[(i + 2) % points.length];
 
 		if (getAngle(pointA, pointB, pointC) < Math.PI) {
 			const tempTriangle = new Triangle(pointA, pointB, pointC);
 			let isEar = true;
-			for (var j = i + 3; j < points.length + i + 3; j++) {
+			for (let j = i + 3; j < points.length + i + 3; j++) {
 				if (isInsideTriangle(tempTriangle, points[j % points.length])) {
 					isEar = false;
 				}
 			}
 			if (isEar) {
-				points.splice((i + 1) % points.length, 1); // erase middle point
+				points[(i + 1) % points.length].setVisible(false);
+				points.splice((i + 1) % points.length, 1);
 				TRIANGLES.push(tempTriangle);
 			}
 		} else {
