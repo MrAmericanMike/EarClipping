@@ -48,13 +48,13 @@ OCTAGON_BUTTON!.addEventListener("click", () => {
 REVERSE_BUTTON!.addEventListener("click", () => {
 	TRIANGLES.length = 0;
 	SVG!.innerHTML = "";
-	POINTS = [...ORIGINAL_POINTS];
-	POINTS.reverse();
+	POINTS = [...ORIGINAL_POINTS].reverse();
+	//	POINTS.reverse();
 	loadPrefab([...POINTS]);
 });
 
 function addPointOnClick(event: MouseEvent) {
-	const POINT = new Point(event.offsetX, event.offsetY, 4, "black");
+	const POINT = new Point(POINTS.length, event.offsetX, event.offsetY, 4, "black");
 	POINT.addToCanvas(SVG!);
 	POINTS.push(POINT);
 	if (POINTS.length > 1) {
@@ -84,7 +84,9 @@ function connectPoints(pointA: Point, pointB: Point) {
 }
 
 function toggleLabels() {
-	console.log("TODO");
+	POINTS.forEach((point) => {
+		point.toggleLabel();
+	});
 }
 
 function getRandomColor() {
@@ -102,7 +104,7 @@ function drawTriangles() {
 	}
 	TRIANGLES.shift();
 	if (TRIANGLES.length) {
-		setTimeout(drawTriangles, 1000);
+		setTimeout(drawTriangles, 100);
 	}
 }
 
@@ -156,7 +158,7 @@ function triangulate(points: Point[]) {
 		points.reverse();
 	}
 
-	let i = 1;
+	let i = 0;
 
 	measureAngles(points);
 
@@ -198,7 +200,7 @@ function loadPrefab(prefab: Coordinates[]) {
 	reset();
 	POINTS.length = 0;
 	for (let i = 0; i < prefab.length; i++) {
-		const POINT = new Point(prefab[i].x, prefab[i].y, 4, "black");
+		const POINT = new Point(POINTS.length, prefab[i].x, prefab[i].y, 4, "black");
 		POINT.addToCanvas(SVG!);
 		POINTS.push(POINT);
 	}
