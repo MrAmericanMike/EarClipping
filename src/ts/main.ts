@@ -87,6 +87,9 @@ function toggleLabels() {
 	POINTS.forEach((point) => {
 		point.toggleLabel();
 	});
+	// ORIGINAL_POINTS.forEach((point) => {
+	// 	point.toggleLabel();
+	// });
 }
 
 function getRandomColor() {
@@ -152,36 +155,38 @@ function isInsideTriangle(triangle: Triangle, point: Point) {
 }
 
 function triangulate(points: Point[]) {
-	if (points.length < 3) return;
+	let pointsToTriangulate = [...points];
 
-	if (getAngle(points[0], points[1], points[2]) > Math.PI) {
-		points.reverse();
+	if (pointsToTriangulate.length < 3) return;
+
+	if (getAngle(pointsToTriangulate[0], pointsToTriangulate[1], pointsToTriangulate[2]) > Math.PI) {
+		pointsToTriangulate.reverse();
 	}
 
 	let i = 0;
 
-	measureAngles(points);
+	measureAngles(pointsToTriangulate);
 
-	while (points.length > 3) {
-		const pointA = points[i % points.length];
-		const pointB = points[(i + 1) % points.length];
-		const pointC = points[(i + 2) % points.length];
+	while (pointsToTriangulate.length > 3) {
+		const pointA = pointsToTriangulate[i % pointsToTriangulate.length];
+		const pointB = pointsToTriangulate[(i + 1) % pointsToTriangulate.length];
+		const pointC = pointsToTriangulate[(i + 2) % pointsToTriangulate.length];
 
 		if (getAngle(pointA, pointB, pointC) < Math.PI) {
 			const tempTriangle = new Triangle(pointA, pointB, pointC);
 			let isEar = true;
-			for (let j = i + 3; j < points.length + i + 3; j++) {
-				if (isInsideTriangle(tempTriangle, points[j % points.length])) {
+			for (let j = i + 3; j < pointsToTriangulate.length + i + 3; j++) {
+				if (isInsideTriangle(tempTriangle, pointsToTriangulate[j % pointsToTriangulate.length])) {
 					isEar = false;
 				}
 			}
 			if (isEar) {
 				//points[(i + 1) % points.length].setVisible(false);
-				points.splice((i + 1) % points.length, 1);
+				pointsToTriangulate.splice((i + 1) % pointsToTriangulate.length, 1);
 				TRIANGLES.push(tempTriangle);
 			}
 		} else {
-			if (i > points.length * points.length * points.length) {
+			if (i > pointsToTriangulate.length * pointsToTriangulate.length * pointsToTriangulate.length) {
 				console.log("BROKEN");
 				break;
 			}
@@ -189,7 +194,7 @@ function triangulate(points: Point[]) {
 		i++;
 	}
 
-	TRIANGLES.push(new Triangle(points[0], points[1], points[2]));
+	TRIANGLES.push(new Triangle(pointsToTriangulate[0], pointsToTriangulate[1], pointsToTriangulate[2]));
 
 	setTimeout(() => {
 		drawTriangles();
